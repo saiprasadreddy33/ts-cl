@@ -2,19 +2,20 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 const protectRoute = async (req, res, next) => {
+  
   try {
-    let token = req.cookies?.token;
+    let token = req.cookies?.token|| req.headers.authorization;
 
     if (token) {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-      const resp = await User.findById(decodedToken.userId).select(
+      const user = await User.findById(decodedToken.userId).select(
         "isAdmin email"
       );
 
       req.user = {
-        email: resp.email,
-        isAdmin: resp.isAdmin,
+        email: user.email,
+        isAdmin: user.isAdmin,
         userId: decodedToken.userId,
       };
 
