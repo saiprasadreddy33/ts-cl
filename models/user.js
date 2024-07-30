@@ -1,16 +1,19 @@
-import bcrypt from "bcryptjs";
 import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
+    username: { type: String, required: true },
     title: { type: String, required: true },
     role: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
+    //username: { type: String },
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     isActive: { type: Boolean, required: true, default: true },
+    isEmailVerified: { type: Boolean, default: false },
+    verificationToken: { type: String }
   },
   { timestamps: true }
 );
